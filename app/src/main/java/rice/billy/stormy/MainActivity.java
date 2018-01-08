@@ -8,6 +8,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 
 import okhttp3.Call;
@@ -17,6 +20,7 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
+    private CurrentWeather mCurrentWeather;
 
     public final static String TAG = MainActivity.class.getSimpleName();
 
@@ -29,6 +33,8 @@ public class MainActivity extends AppCompatActivity {
         double longitude = -122.4233;
         String forecastUrl = "https://api.darksky.net/forecast/" + apiKey + "/" + latitude + "," + longitude;
 
+
+
         if (isNetworkAvailable()) {
             OkHttpClient client = new OkHttpClient();
             Request request = new Request.
@@ -39,19 +45,25 @@ public class MainActivity extends AppCompatActivity {
             call.enqueue(new Callback() {
                 @Override
                 public void onFailure(Call call, IOException e) {
-
+                       Log.v(TAG,  "callback failure");
                 }
 
                 @Override
                 public void onResponse(Call call, Response response) throws IOException {
                     try {
-                        Log.v(TAG, response.body().string());
+                        String jsonData = response.body().string();
+                        Log.v(TAG, jsonData);
                         if (response.isSuccessful()) {
-
+                            mCurrentWeather = getCurrentDetails(jsonData);
                         } else {
                             alertUserAboutError();
                         }
-                    } catch (IOException e) {
+
+                    }
+                    catch (IOException e) {
+                        Log.e(TAG, "Exception caught ", e);
+                    }
+                    catch (JSONException e) {
                         Log.e(TAG, "Exception caught ", e);
                     }
 
@@ -65,6 +77,27 @@ public class MainActivity extends AppCompatActivity {
 
         Log.d(TAG, "Main UI code is running!");
 
+    }
+
+    private CurrentWeather getCurrentDetails(String jsonData) throws JSONException{
+        JSONObject forecast = new JSONObject(jsonData);
+        String timezone = forecast.getString("timezone");
+        JSONObject currently = forecast.getJSONObject("currently");
+
+
+        CurrentWeather currentWeather = new CurrentWeather();
+        currentWeather.setHumidity(currently.getDouble("humidity"));
+        currentWeather.setPrecipChance(currently.getInt("precipProbability"));
+        currentWeather.setTemperature(currently.getDouble("temperature"));
+        currentWeather.setIcon(currently.getString("icon"));
+        currentWeather.setTime(currently.getLong("time"));
+        currentWeather.setSummary(currently.getString("summary"));
+        currentWeather.setTimeZone(timezone);
+
+
+        Log.d(TAG, "Formatted time: " + currentWeather.getFormattedTime());
+        Log.i(TAG, "From JSON: " + timezone);
+        return null;
     }
 
     private boolean isNetworkAvailable() {
