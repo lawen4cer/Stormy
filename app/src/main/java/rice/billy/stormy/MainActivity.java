@@ -158,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
         mTemperatureLabel.setText(Integer.toString(mCurrentWeather.getTemperature()));
         mTimeLabel.setText("Current time is " + mCurrentWeather.getFormattedTime());
         mHumidityValue.setText(Double.toString(mCurrentWeather.getHumidity()));
-        mPrecipValue.setText(Double.toString(mCurrentWeather.getPrecipChance()) + "%");
+        mPrecipValue.setText(Integer.toString(mCurrentWeather.getPrecipChance()) + "%");
         mSummaryLabel.setText(mCurrentWeather.getSummary());
 
         Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconID());
