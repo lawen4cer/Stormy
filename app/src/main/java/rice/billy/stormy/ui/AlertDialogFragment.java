@@ -1,10 +1,12 @@
-package rice.billy.stormy;
+package rice.billy.stormy.ui;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.os.Bundle;
+
+import rice.billy.stormy.R;
 
 /**
  * Created by billy on 1/7/2018.

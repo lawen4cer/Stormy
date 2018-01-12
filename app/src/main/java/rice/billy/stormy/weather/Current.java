@@ -1,14 +1,16 @@
-package rice.billy.stormy;
+package rice.billy.stormy.weather;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
+import rice.billy.stormy.R;
+
 /**
  * Created by billy on 1/7/2018.
  */
 
-public class CurrentWeather {
+public class Current {
     private String mIcon;
     private long mTime;
     private double mTemperature;

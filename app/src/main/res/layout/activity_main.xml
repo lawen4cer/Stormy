@@ -7,7 +7,7 @@
     android:paddingLeft="32dp"
     android:paddingRight="32dp"
     android:background="@color/background_custom"
-    tools:context="rice.billy.stormy.MainActivity">
+    tools:context="rice.billy.stormy.ui.MainActivity">
 
     <TextView
         android:id="@+id/temperatureLabel"
