@@ -1,13 +1,16 @@
 package rice.billy.stormy;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 
@@ -48,6 +52,14 @@ public class MainActivity extends AppCompatActivity {
     ImageButton refreshImage;
     @BindView(R.id.progressBar)
     ProgressBar mProgressBar;
+    @BindView(R.id.locationLabel)
+    TextView mLocationLabel;
+
+
+
+
+    double latitude = 37.8456;
+    double longitude = -83.8583;
 
 
     @Override
@@ -58,9 +70,55 @@ public class MainActivity extends AppCompatActivity {
 
         mProgressBar.setVisibility(View.INVISIBLE);
 
-        final double latitude = 37.8456;
-        final double longitude = -83.8583;
 
+        handleClickListeners();
+
+
+        getForecast(getLatitude(), getLongitude());
+
+        Log.d(TAG, "Main UI code is running!");
+
+
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.menuButtonLexington:
+                setLatitude(38.0406);
+                setLongitude(-84.5037);
+                getForecast(latitude,longitude);
+                mLocationLabel.setText("Lexington, KY");
+                return true;
+            case R.id.menuButtonStanton:
+                setLatitude(37.8456);
+                setLongitude(-83.8583);
+                getForecast(latitude,longitude);
+                mLocationLabel.setText("Stanton, KY");
+                return true;
+            case R.id.mMenuButtonFairdale:
+                setLatitude(38.2527);
+                setLongitude(-85.7585);
+                getForecast(latitude,longitude);
+                mLocationLabel.setText("Fairdale, KY");
+                return true;
+            case R.id.menuItemAbout:
+                Intent intent = new Intent(this, AboutActivity.class);
+                startActivity(intent);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void handleClickListeners() {
         refreshImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -68,12 +126,6 @@ public class MainActivity extends AppCompatActivity {
                 //Log.d(TAG, "onClick: It Works");
             }
         });
-
-
-        getForecast(latitude, longitude);
-
-        Log.d(TAG, "Main UI code is running!");
-
 
     }
 
@@ -158,7 +210,7 @@ public class MainActivity extends AppCompatActivity {
         mTemperatureLabel.setText(Integer.toString(mCurrentWeather.getTemperature()));
         mTimeLabel.setText("Current time is " + mCurrentWeather.getFormattedTime());
         mHumidityValue.setText(Double.toString(mCurrentWeather.getHumidity()));
-        mPrecipValue.setText(Double.toString(mCurrentWeather.getPrecipChance()) + "%");
+        mPrecipValue.setText(Integer.toString(mCurrentWeather.getPrecipChance()) + "%");
         mSummaryLabel.setText(mCurrentWeather.getSummary());
 
         Drawable drawable = getResources().getDrawable(mCurrentWeather.getIconID());
@@ -201,6 +253,22 @@ public class MainActivity extends AppCompatActivity {
         AlertDialogFragment dialog = new AlertDialogFragment();
         dialog.show(getFragmentManager(), "error_dialog");
 
+    }
+
+    public double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(double latitude) {
+        this.latitude = latitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(double longitude) {
+        this.longitude = longitude;
     }
 
 
