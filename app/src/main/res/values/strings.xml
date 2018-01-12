@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Stormy</string>
+    <string name="app_name">Stanton Official Weather</string>
     <string name="error_title">Oops! Sorry!</string>
     <string name="error_message">There was an error. Please try again.</string>
     <string name="positive_button">Ok</string>
